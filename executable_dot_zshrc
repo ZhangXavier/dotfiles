@@ -1,0 +1,77 @@
+source ~/.zinit/bin/zinit.zsh
+
+# 快速目录跳转
+zinit ice lucid wait='1'
+zinit light skywind3000/z.lua
+
+# 语法高亮
+zinit ice lucid wait='0' atinit='zpcompinit'
+zinit light zdharma-continuum/fast-syntax-highlighting
+
+# 自动建议
+zinit ice lucid wait="0" atload='_zsh_autosuggest_start'
+zinit light zsh-users/zsh-autosuggestions
+
+# 补全
+zinit ice lucid wait='0'
+zinit light zsh-users/zsh-completions
+
+# 加载 OMZ 框架及部分插件
+zinit snippet OMZ::lib/completion.zsh
+zinit snippet OMZ::lib/history.zsh
+zinit snippet OMZ::lib/key-bindings.zsh
+zinit snippet OMZ::lib/theme-and-appearance.zsh
+zinit snippet OMZ::plugins/colored-man-pages/colored-man-pages.plugin.zsh
+zinit snippet OMZ::plugins/sudo/sudo.plugin.zsh
+
+#zinit ice svn
+#zinit snippet OMZ::plugins/extract
+
+zinit ice lucid wait='1'
+zinit snippet OMZ::plugins/git/git.plugin.zsh
+
+# 加载 pure 主题
+zinit ice compile'(pure|async).zsh' pick'async.zsh' src'pure.zsh'
+zinit light sindresorhus/pure
+
+alias ll='ls -l'
+alias la='ls -al'
+alias grep=rg
+#alias cat=bat
+
+alias vizshrc='vim ~/.zshrc'
+
+setproxy() {
+    export http_proxy=http://127.0.0.1:7890 https_proxy=http://127.0.0.1:7890 all_proxy=socks5://127.0.0.1:7890
+# export http_proxy=http://127.0.0.1:8889 https_proxy=http://127.0.0.1:8889 all_proxy=socks5://127.0.0.1:1089
+}
+
+unsetproxy() {
+    unset http_proxy
+    unset https_proxy
+    unset all_proxy
+}
+
+export PATH=/usr/local/bin:$PATH
+
+export GOPATH=$HOME/Developer/go
+export PATH=$PATH:$GOPATH/bin
+
+export PATH=$PATH:$HOME/.cargo/env
+
+alias python="/usr/local/bin/python3"
+alias pip="/usr/local/bin/pip3"
+
+eval $(thefuck --alias)
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# >>> switch between different JDK versions
+jdk() {
+    version=$1
+    export JAVA_HOME=$(/usr/libexec/java_home -v"$version");
+    java -version
+}
+

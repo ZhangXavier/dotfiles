@@ -1,0 +1,157 @@
+" 使用vim操作，不兼容vi
+set nocompatible
+
+
+" 外观
+" 打开语法高亮
+syntax enable
+" 底部显示模式
+set showmode
+" 底部显示当前键入指令
+set showcmd
+" 支持鼠标
+set mouse=a
+" 启用256色
+set t_Co=256
+" 显示行号
+set number
+" 显示标题
+set title
+" 显示光标所在行行号，其余行为相对行号
+set relativenumber
+" 光标所在列高亮
+" set cursorcolumn
+" 光标所在行高亮
+set cursorline
+" 设置行宽
+set textwidth=80
+" 自动折行
+set wrap
+" 只有遇到指定的符号折行
+set linebreak
+" 折行距离右边框字符数
+set wrapmargin=4
+" 垂直滚动时，光标距离顶部/底部的位置
+set scrolloff=5
+" 水平滚动时，光标距离行首或行尾的位置，该配置在不折行时比较有用
+set sidescrolloff=15
+" 是否显示状态栏，0 不显示，1 只在多窗口时显示，2 显示。
+set laststatus=2
+" 状态栏显示光标当前位置
+set ruler
+" 设置字体
+if has('gui_running')
+    set guifont=Sarasa\ Term\ SC:h12
+endif
+
+" 搜索
+" 自动高亮对应括号
+set showmatch
+" 高亮显示匹配结果
+set hlsearch
+" 即时跳到第一个匹配
+set incsearch
+" 忽略大小写。
+set ignorecase
+" 如果同时打开了ignorecase，对于只有一个大写字母的搜索词，大小写敏感；其他情况都是大小写不敏感
+" 例如：Test!=test；test==Test
+set smartcase
+
+
+" 编辑
+" 使用utf-8 编码
+set encoding=utf-8
+set termencoding=utf-8
+set fileformats=unix,dos,mac
+set fileencodings=ucs-bom,utf-8,chinese,cp936,gb18030,big5,euc-jp,euc-kr,latin1
+" 开启文件类型检查，并且载入与该类型对应的缩进规则
+" 比如，如果编辑的是.py文件，Vim 就是会找 Python 的缩进规则~/.vim/indent/python.vim
+filetype on
+filetype plugin on
+filetype indent on
+" 按下回车键后，下一行的缩进会自动跟上一行的缩进保持一致，忽略#行
+set smartindent
+" 表示缩进列数对齐到 shiftwidth 值的整数倍
+set shiftround
+" 按下 Tab 键时，Vim 显示的空格数
+set tabstop=4
+" 在文本上按下>>（增加一级缩进）、<<（取消一级缩进）或者==（自动缩进）时，每一级的字符数。
+set shiftwidth=4
+" Tab 转为多少个空格
+set softtabstop=4
+" 自动将 Tab 转为空格
+set expandtab
+" 打开英语单词的拼写检查。
+" set spell spelllang=en_us
+" 保留撤销历史 文件名以.un~开头。
+set undofile
+" 设置操作历史文件的保存位置。
+if(has("win32") || has("win64") || has("win95") || has("win16"))
+    set undodir=~/vimfiles/undofile//
+else
+    set undodir=~/.vim/.undo//
+endif
+" 自动切换工作目录。这主要用在一个 Vim 会话之中打开多个文件的情况，默认的工作目录是打开的第一个文件的目录。该配置可以将工作目录自动切换到，正在编辑的文件的目录。
+set autochdir
+" 出错时，不要发出响声。
+set noerrorbells
+" 出错时，发出视觉提示，通常是屏幕闪烁。
+set visualbell
+" Vim 需要记住多少次历史操作。
+set history=1000
+" 打开文件监视。监视此时文件是否发生外部改变
+set autoread
+" 如果行尾有多余的空格（包括 Tab 键），该配置将让这些空格显示成可见的小方块。
+set listchars=tab:»■,trail:■
+set list
+" 命令模式下，底部操作指令按下 Tab 键自动补全。第一次按下 Tab，会显示所有匹配的操作指令的清单；第二次按下 Tab，会依次选择各个指令。
+set wildmenu
+set wildmode=longest:list,full
+
+" Plug install packages
+" Initialize plugin system
+if(has("win32") || has("win64") || has("win95") || has("win16"))
+    call plug#begin('~/vimfiles/plugged')
+else
+    call plug#begin('~/.vim/plugged')
+endif
+" dracula主题
+Plug 'dracula/vim', { 'as': 'dracula' }
+" solarized8主题
+Plug 'lifepillar/vim-solarized8'
+" gruvbox
+Plug 'morhetz/gruvbox'
+" 缩进线
+Plug 'yggdroot/indentline'
+" unimpaired
+Plug 'tpope/vim-unimpaired'
+call plug#end()
+
+" 主题设置
+" themes
+
+if has('gui_running')
+    if has('mac') && system("defaults read -g AppleInterfaceStyle") =~ '^Dark'
+        set background=dark
+        colorscheme dracula
+    else
+        set background=light
+        colorscheme solarized8
+    endif
+else
+    set background=dark
+    "colorscheme dracula
+    let g:gruvbox_contrast_dark = 'soft'
+    let g:gruvbox_italic = '1'
+    let g:gruvbox_italicize_strings = '1'
+    colorscheme gruvbox
+endif
+
+"解决Windows下Gvim乱码问题
+if(has('gui_running') && has("win32") || has("win64") || has("win95") || has("win16"))
+    "解决consle提示信息输出乱码
+    language messages zh_CN.utf-8
+    " 解决菜单乱码
+    source $VIMRUNTIME/delmenu.vim
+    source $VIMRUNTIME/menu.vim
+endif

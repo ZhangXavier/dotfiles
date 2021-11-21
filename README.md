@@ -1,2 +1,2 @@
 # dotfiles
-My macOS / Ubuntu dotfiles 📍
+My dotfiles 📍
